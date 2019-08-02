@@ -66,7 +66,8 @@ const fetchISSFlyOverTimes = function(coords, callback) {
   const url = `http://api.open-notify.org/iss-pass.json?lat=${coords.latitude}&lon=${coords.longitude}`;
   request(url, (error, resp, body) => {
     if (error) {
-      return callback(error, null);
+      callback(error, null);
+      return;
     }
     if (resp.statusCode !== 200) {
       const msg = `Status Code ${resp.statusCode} when fetching ISS pass times: ${body}`;
@@ -92,11 +93,11 @@ const nextISSTimesForMyLocation = function(callback) {
     if (error) {
       return callback(error, null);
     }
-    fetchCoordsByIP(ip, (error, coords) => {
+    fetchCoordsByIP(ip, (error, loc) => {
       if (error) {
         return callback(error, null);
       }
-      fetchISSFlyOverTimes(coords, (error, nextPasses) => {
+      fetchISSFlyOverTimes(loc, (error, nextPasses) => {
         if (error) {
           return callback(error, null);
         }
